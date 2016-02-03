@@ -87,6 +87,8 @@ ALLOWED_KEYS = DOCKER_CONFIG_KEYS + [
     'container_name',
     'dockerfile',
     'logging',
+    'pre_create',
+    'pre_start',
 ]
 
 DOCKER_VALID_URL_PREFIXES = (

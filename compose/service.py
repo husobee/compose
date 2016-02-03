@@ -31,6 +31,7 @@ from .parallel import parallel_start
 from .progress_stream import stream_output
 from .progress_stream import StreamOutputError
 from .utils import json_hash
+from .utils import run_hook
 
 
 log = logging.getLogger(__name__)
@@ -114,6 +115,8 @@ class Service(object):
         volumes_from=None,
         network_mode=None,
         networks=None,
+        pre_create=None,
+        pre_start=None,
         **options
     ):
         self.name = name
@@ -121,6 +124,8 @@ class Service(object):
         self.project = project
         self.use_networking = use_networking
         self.links = links or []
+        self.pre_create = pre_create or []
+        self.pre_start = pre_start or []
         self.volumes_from = volumes_from or []
         self.network_mode = network_mode or NetworkMode(None)
         self.networks = networks or []
@@ -238,6 +243,13 @@ class Service(object):
                 "Stopping and removing",
             )
 
+    def _run_hooks(self, hooks):
+        """Run hooks"""
+        for cmd in hooks:
+            log.info("Running {0}".format(cmd))
+            output = run_hook(cmd)
+            log.info("Output of pre_create {0}".format(output))
+
     def create_container(self,
                          one_off=False,
                          do_build=True,
@@ -249,6 +261,8 @@ class Service(object):
         Create a container for this service. If the image doesn't exist, attempt to pull
         it.
         """
+        self._run_hooks(self.pre_create)
+
         self.ensure_image_exists(do_build=do_build)
 
         container_options = self._get_container_create_options(
@@ -424,6 +438,8 @@ class Service(object):
             return self.start_container(container)
 
     def start_container(self, container):
+        self._run_hooks(self.pre_start)
+
         container.start()
         self.connect_container_to_networks(container)
         return container

@@ -92,6 +92,8 @@ class Project(object):
                     links=links,
                     network_mode=network_mode,
                     volumes_from=volumes_from,
+                    pre_create=service_dict.pop('pre_create'),
+                    pre_start=service_dict.pop('pre_start'),
                     **service_dict)
             )
 

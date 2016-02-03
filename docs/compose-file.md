@@ -361,6 +361,36 @@ It's recommended that you use reverse-DNS notation to prevent your labels from c
       - "com.example.department=Finance"
       - "com.example.label-with-empty-value"
 
+### pre_create
+
+Define an array of commands to run on the host prior to the creation of this service.
+
+    web:
+      pre_create:
+       - ./do_work.sh
+       - ./do_more_work.sh
+
+Commands specified for this service are performed sequentially in order defined
+by the list in the service definition.  These commands will be done only once
+per service creation.
+
+> **Note:** These commands are run on the host instance, not in docker.
+
+### pre_start
+
+Define an array of commands to run on the host prior to the start of this service.
+
+    web:
+      pre_start:
+       - ./do_work.sh
+       - ./do_more_work.sh
+
+Commands specified for this service are performed sequentially in order defined
+by the list in the service definition.  These commands will be done only once
+per service creation.
+
+> **Note:** These commands are run on the host instance, not in docker.
+
 ### links
 
 Link to containers in another service. Either specify both the service name and

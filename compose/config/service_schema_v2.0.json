@@ -38,6 +38,8 @@
             {"type": "array", "items": {"type": "string"}}
           ]
         },
+        "pre_create": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "pre_start": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
         "container_name": {"type": "string"},
         "cpu_shares": {"type": ["number", "string"]},
         "cpu_quota": {"type": ["number", "string"]},

@@ -5,11 +5,18 @@ import codecs
 import hashlib
 import json
 import json.decoder
+import subprocess
 
 import six
 
 
 json_decoder = json.JSONDecoder()
+
+
+def run_hook(cmd):
+    """Simple hook runner"""
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    return process.communicate()[0]
 
 
 def get_output_stream(stream):
