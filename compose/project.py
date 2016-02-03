@@ -75,6 +75,8 @@ class Project(object):
             links = project.get_links(service_dict)
             network_mode = project.get_network_mode(service_dict, service_networks)
             volumes_from = get_volumes_from(project, service_dict)
+            pre_create = project.get_list_from("pre_create", service_dict)
+            pre_start = project.get_list_from("pre_start", service_dict)
 
             if config_data.version != V1:
                 service_dict['volumes'] = [
@@ -92,8 +94,8 @@ class Project(object):
                     links=links,
                     network_mode=network_mode,
                     volumes_from=volumes_from,
-                    pre_create=service_dict.pop('pre_create'),
-                    pre_start=service_dict.pop('pre_start'),
+                    pre_create=pre_create,
+                    pre_start=pre_start,
                     **service_dict)
             )
 
@@ -174,6 +176,14 @@ class Project(object):
                         'exist.' % (service_dict['name'], service_name))
             del service_dict['links']
         return links
+
+    def get_list_from(self, item, service_dict):
+        items = []
+        if item in service_dict:
+            for v in service_dict.get(item, []):
+                items.append(v)
+            del service_dict[item]
+        return items
 
     def get_network_mode(self, service_dict, networks):
         network_mode = service_dict.pop('network_mode', None)
