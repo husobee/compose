@@ -15,7 +15,7 @@ json_decoder = json.JSONDecoder()
 
 def run_hook(cmd):
     """Simple hook runner"""
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
     return process.communicate()[0]
 
 
